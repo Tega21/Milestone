@@ -3,9 +3,17 @@ package app;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class represents the inventory in our store. USing a list to manage 
+ * SalableProduct objects.
+ */
 public class InventoryManager {
     private List<SalableProduct> products;
-
+    
+    /**
+     * Inventory manager class is the manger of all products in the store.
+     * We can add new items in our store in this class.
+     */
     public InventoryManager(){
         this.products = new ArrayList<>();
 
@@ -16,7 +24,12 @@ public class InventoryManager {
         products.add(new SalableProduct("Magic Juice", "Delicious drink that replenishes you to" +
                 "full health", 20.0, 100));
     }
-
+    
+    /**
+     * Returns the list of all products in the inventory.
+     *
+     * @return A list containing all the products available in the inventory.
+     */
     public List<SalableProduct> getProducts(){
         return products;
     }

@@ -3,16 +3,25 @@ package app;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This class represents the user's shopping cart. It will add and
+ * remove products from their cart
+ */
 public class ShoppingCart {
     private List<SalableProduct> items;
-
+    
+    /**
+     * Constructs a new ShoppingCart instance. Initializes internal list
+     * of products
+     */
     public ShoppingCart(){
         this.items = new ArrayList<>();
     }
 
     /**
      * Adds a product to the cart with the desired quantity.
-     * If prodcut already exists, it will update the quantity in the cart
+     * If product already exists, it will update the quantity in the cart
      *
      * @param product The product to add
      * @param quantity The quantity of the product
@@ -73,7 +82,10 @@ public class ShoppingCart {
         }
         return null; // if no product found with the given name in the cart
     }
-
+    
+    /**
+     * Clear items in the cart
+     */
     public void clear() {
         items.clear();
     }

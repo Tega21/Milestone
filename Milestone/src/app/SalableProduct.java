@@ -9,17 +9,17 @@ package app;
 public class SalableProduct {
 
 	
-	 private String name;
+	 	private String name;
 	    private String description;
 	    private double price;
 	    private int quantity;
 
 	    /**
 	     * The constructor for SalableProduct with all fields
-	     * @param name
-	     * @param description
-	     * @param price
-	     * @param quantity
+	     * @param name name of products
+	     * @param description product description
+	     * @param price how much products costs
+	     * @param quantity the amount of the product we have in the store
 	     */
 
 	    public SalableProduct(String name, String description, double price, int quantity){
