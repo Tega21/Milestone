@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class represents the inventory in our store. USing a list to manage 
+ * Class represents the inventory in our store. Using a list to manage 
  * SalableProduct objects.
  */
 public class InventoryManager {
@@ -17,10 +17,14 @@ public class InventoryManager {
     public InventoryManager(){
         this.products = new ArrayList<>();
 
-        products.add(new SalableProduct("Sword", "Long, Sharpe Blade", 50.0, 35));
-        products.add(new SalableProduct("Bow and Arrow", "Curved wooden bow and a feather arrow " +
-                "with a sharp point", 150.0, 15));
-        products.add(new SalableProduct("Shield", "Reinforced steel shield ", 30.0, 75));
+        products.add(new SalableProduct("King's Sword", "Long, Sharpe Blade originally welded for the King", 35.0, 35));
+        products.add(new SalableProduct("Majestic Bow and Arrow", "Curved wooden bow and a feather arrow " +
+                "with a sharp point", 40.0, 15));
+        products.add(new SalableProduct("Stun rifle", "Rifle that was brought from the future that launches " + 
+                "electric shocked bullet projectiles", 200.0, 5));
+        products.add(new SalableProduct("Armoured Shield", "Reinforced steel shield ", 25.0, 75));
+        products.add(new SalableProduct("Dragon Skin Body Amour", "Body suit armour made from the skin " + 
+        		"of a slayed dragon", 85.0, 100));
         products.add(new SalableProduct("Magic Juice", "Delicious drink that replenishes you to" +
                 "full health", 20.0, 100));
     }

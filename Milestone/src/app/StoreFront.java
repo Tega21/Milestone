@@ -31,12 +31,11 @@
          * Displays the main menu options to the console.
          */
         public void displayMenu() {
-            System.out.println("\nWelcome to the Arena Store!");
-            System.out.println("1. View Products");
-            System.out.println("2. Add Product to Cart");
-            System.out.println("3. Remove Product from Cart");
-            System.out.println("4. View Cart");
-            System.out.println("5. Checkout");
+            System.out.println("\nWELCOME TO THE SMASH BROS ARENA STORE!!");
+            System.out.println("1. View Products");           
+            System.out.println("2. Remove Product from Cart");
+            System.out.println("3. View Cart");
+            System.out.println("4. Checkout");
             System.out.println("0. Exit");
         }
         
@@ -56,18 +55,15 @@
 
                 switch (choice) {
                     case 1:
-                        displayProducts();
-                        break;
+                    	displayProductsAndAddToCart(scnr);
+                        break;                    
                     case 2:
-                        addProductToCart(scnr);
-                        break;
-                    case 3:
                         removeProductFromCart(scnr);
                         break;
-                    case 4:
+                    case 3:
                         displayCart();
                         break;
-                    case 5:
+                    case 4:
                         checkout();
                         break;
                     case 0:
@@ -83,50 +79,97 @@
         
         /**
          * Displays a list of all salable products to the user.
+         * UPDATED
+         * Method is now responsible for the displaying of all store's products, but now
+         * asks the user the question of whether they want to purchase any of these items.
+         * There is an option for the user to go back to the main menu if they decide not
+         * to purchase anything.
+         * ALSO, changes the interface by adding a number input rather than having the
+         * user type out the name of the item.
          */
-        private void displayProducts() {
+        private void displayProductsAndAddToCart(Scanner scanner) {
             List<SalableProduct> products = inventoryManager.getProducts();
+            if (products.isEmpty()) {
+                System.out.println("There are no products available for purchase.");
+                return;
+            }
+
             System.out.println("\nAvailable Products:");
-            for (SalableProduct product : products) {
-                System.out.println(product);
+            for (int i = 0; i < products.size(); i++) {
+                SalableProduct product = products.get(i);
+                System.out.printf("%d - %s - %s ($%.2f) [Quantity: %d]\n",
+                        i + 1, product.getName(), product.getDescription(), product.getPrice(), product.getQuantity());
             }
-        }
-        
-        /**
-         * Handles the purchasing of a product. It prompts the user to
-         * choose a product and adds it to the shopping cart.
-         */
-        private void addProductToCart(Scanner scanner) {
-            displayProducts();
-            System.out.print("\nEnter the name of the product you want to add to the cart: ");
-            String name = scanner.nextLine();
-            SalableProduct product = inventoryManager.getProductByName(name);
-            if (product != null) {
-                System.out.print("Enter the quantity: ");
-                int quantity = scanner.nextInt();
-                scanner.nextLine(); // Consume newline character
-                shoppingCart.addProduct(product, quantity);
-                System.out.println("Added " + quantity + " " + name + "(s) to the cart.");
-            } else {
-                System.out.println("Product not found!");
+
+            System.out.println("Enter the number of the product you wish to add to your cart, or 0 to return:");
+            int productNumber = scanner.nextInt();
+
+            // Check if user wants to return to the previous menu
+            if (productNumber == 0) {
+                return;
             }
-        }
+
+            // Validate the product number input
+            if (productNumber < 1 || productNumber > products.size()) {
+                System.out.println("Invalid product number. Please try again.");
+                return;
+            }
+
+            SalableProduct selectedProduct = products.get(productNumber - 1);
+
+            // Ask for the quantity to add to the cart
+            System.out.print("Enter the quantity to add to your cart: ");
+            int quantity = scanner.nextInt();
+            scanner.nextLine(); // Consume newline character
+
+            // Here, add logic to check if the selected quantity is available
+
+            shoppingCart.addProduct(selectedProduct, quantity);
+            System.out.println("Added " + quantity + " of " + selectedProduct.getName() + " to the cart.");
+        }        
+
         
         /**
          * Allows a user to return a product, removing it from the shopping cart.
+         * UPDATED
+         * Method now allows the user to see their cart before removing items
+         * from it. They will also be given a message of no items in the cart 
+         * if their cart is empty.
          */
         private void removeProductFromCart(Scanner scanner) {
-            System.out.print("\nEnter the name of the product you want to remove from the cart: ");
-            String name = scanner.nextLine();
-            SalableProduct product = shoppingCart.getProductByName(name);
-            if (product != null) {
-                shoppingCart.removeProduct(product);
-                System.out.println("Removed " + name + " from the cart.");
-            } else {
-                System.out.println("Product not found in the cart!");
-            }
-        }
-        
+        	 List<SalableProduct> items = shoppingCart.getItems();
+        	    
+        	    if (items.isEmpty()) {
+        	        System.out.println("\nYour cart is empty, nothing to remove.");
+        	        return;
+        	    }
+
+        	    System.out.println("\nItems in your cart:");
+        	    for (int i = 0; i < items.size(); i++) {
+        	        SalableProduct item = items.get(i);
+        	        System.out.printf("%d - %s - %s ($%.2f) [Quantity: %d]\n",
+        	                i + 1, item.getName(), item.getDescription(), item.getPrice(), item.getQuantity());
+        	    }
+
+        	    System.out.println("Enter the number of the product you wish to remove from your cart, or 0 to cancel:");
+        	    int itemNumber = scanner.nextInt();
+        	    
+        	    // Check if user wants to cancel the remove action
+        	    if (itemNumber == 0) {
+        	        return;
+        	    }
+
+        	    // Validate the product number input
+        	    if (itemNumber < 1 || itemNumber > items.size()) {
+        	        System.out.println("Invalid product number. Please try again.");
+        	        return;
+        	    }
+
+        	    // Remove the selected item from the cart
+        	    SalableProduct productToRemove = items.get(itemNumber - 1);
+        	    shoppingCart.removeProduct(productToRemove);
+        	    System.out.println("Removed " + productToRemove.getName() + " from the cart.");
+        	}
         /**
          * Processes the user to see their cart and all the items that
          * they have added to it. 
