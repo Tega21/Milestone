@@ -27,6 +27,7 @@ public class InventoryManager {
         		"of a slayed dragon", 85.0, 100));
         products.add(new SalableProduct("Magic Juice", "Delicious drink that replenishes you to" +
                 "full health", 20.0, 100));
+        products.add(new SalableProduct("Senzu Beans", "Mystical beans that replensish your energy", 12.0, 500));
     }
     
     /**

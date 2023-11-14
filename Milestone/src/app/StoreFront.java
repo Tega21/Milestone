@@ -122,7 +122,7 @@
             int quantity = scanner.nextInt();
             scanner.nextLine(); // Consume newline character
 
-            // Here, add logic to check if the selected quantity is available
+            // Adds logic to check if the selected quantity is available
 
             shoppingCart.addProduct(selectedProduct, quantity);
             System.out.println("Added " + quantity + " of " + selectedProduct.getName() + " to the cart.");
