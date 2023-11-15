@@ -2,8 +2,11 @@
 
 	package app;
 
-    import java.util.List;
+	import java.util.List;
     import java.util.Scanner;
+    import java.util.Map;
+
+import inventory.SalableProduct;
     
     /**
      * This class is responsible for user interface and its purpose is for the user
@@ -32,10 +35,11 @@
          */
         public void displayMenu() {
             System.out.println("\nWELCOME TO THE SMASH BROS ARENA STORE!!");
-            System.out.println("1. View Products");           
+            System.out.println("1. View and Add Products");           
             System.out.println("2. Remove Product from Cart");
             System.out.println("3. View Cart");
             System.out.println("4. Checkout");
+            System.out.println("5. Return All Items in Cart");
             System.out.println("0. Exit");
         }
         
@@ -65,6 +69,9 @@
                         break;
                     case 4:
                         checkout();
+                        break;
+                    case 5:
+                        clearCart(scnr);
                         break;
                     case 0:
                         System.out.println("Exiting the Arena Store. Goodbye!");
@@ -122,10 +129,11 @@
             int quantity = scanner.nextInt();
             scanner.nextLine(); // Consume newline character
 
-            // Adds logic to check if the selected quantity is available
+            // Here, add logic to check if the selected quantity is available
 
             shoppingCart.addProduct(selectedProduct, quantity);
             System.out.println("Added " + quantity + " of " + selectedProduct.getName() + " to the cart.");
+        
         }        
 
         
@@ -137,55 +145,59 @@
          * if their cart is empty.
          */
         private void removeProductFromCart(Scanner scanner) {
-        	 List<SalableProduct> items = shoppingCart.getItems();
-        	    
-        	    if (items.isEmpty()) {
-        	        System.out.println("\nYour cart is empty, nothing to remove.");
-        	        return;
-        	    }
+            Map<SalableProduct, Integer> cartItems = shoppingCart.getItems();
+            if (cartItems.isEmpty()) {
+                System.out.println("\nYour cart is empty, nothing to remove.");
+                return;
+            }
 
-        	    System.out.println("\nItems in your cart:");
-        	    for (int i = 0; i < items.size(); i++) {
-        	        SalableProduct item = items.get(i);
-        	        System.out.printf("%d - %s - %s ($%.2f) [Quantity: %d]\n",
-        	                i + 1, item.getName(), item.getDescription(), item.getPrice(), item.getQuantity());
-        	    }
+            System.out.println("\nItems in your cart:");
+            SalableProduct[] products = cartItems.keySet().toArray(new SalableProduct[0]);
+            for (int i = 0; i < products.length; i++) {
+                System.out.printf("%d - %s - Price: $%.2f - Quantity in Cart: %d\n",
+                        i + 1, products[i].getName(), products[i].getPrice(), cartItems.get(products[i]));
+            }
 
-        	    System.out.println("Enter the number of the product you wish to remove from your cart, or 0 to cancel:");
-        	    int itemNumber = scanner.nextInt();
-        	    
-        	    // Check if user wants to cancel the remove action
-        	    if (itemNumber == 0) {
-        	        return;
-        	    }
+            System.out.println("Enter the number of the product you wish to remove from your cart, or 0 to cancel:");
+            int itemNumber = scanner.nextInt();
 
-        	    // Validate the product number input
-        	    if (itemNumber < 1 || itemNumber > items.size()) {
-        	        System.out.println("Invalid product number. Please try again.");
-        	        return;
-        	    }
+            if (itemNumber == 0) {
+                return;
+            }
 
-        	    // Remove the selected item from the cart
-        	    SalableProduct productToRemove = items.get(itemNumber - 1);
-        	    shoppingCart.removeProduct(productToRemove);
-        	    System.out.println("Removed " + productToRemove.getName() + " from the cart.");
-        	}
+            if (itemNumber < 1 || itemNumber > products.length) {
+                System.out.println("Invalid product number. Please try again.");
+                return;
+            }
+
+            // Remove the selected item from the cart
+            SalableProduct productToRemove = products[itemNumber - 1];
+            shoppingCart.removeProduct(productToRemove);
+            System.out.println("Removed " + productToRemove.getName() + " from the cart.");
+        }
+
         /**
          * Processes the user to see their cart and all the items that
-         * they have added to it. 
+         * they have added to it. Will use the displayCartContents()
+         * method from the ShoppingCart class
          */
+     // Inside StoreFront class
+
         private void displayCart() {
-            List<SalableProduct> items = shoppingCart.getItems();
-            if (items.isEmpty()) {
-                System.out.println("\nYour cart is empty.");
-            } else {
-                System.out.println("\nItems in your cart:");
-                for (SalableProduct item : items) {
-                    System.out.println(item);
-                }
-                System.out.println("Total Price: " + shoppingCart.getTotal());
-            }
+            shoppingCart.displayCartContents();
         }
+        
+        private void clearCart(Scanner scnr) {
+        	 System.out.println("Are you sure you want to empty your cart? (y/n)");
+        	    String confirmation = scnr.nextLine().trim().toLowerCase();
+
+        	    if (confirmation.equals("y")) {
+        	        shoppingCart.clear();
+        	        System.out.println("The cart has been emptied!");
+        	    } else {
+        	        System.out.println("Cart clearing cancelled.");
+        	    }
+        	}
         
         /**
          * Processes the user's shopping cart and completes the purchase.
