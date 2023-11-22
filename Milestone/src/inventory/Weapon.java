@@ -4,7 +4,7 @@ package inventory;
  * Represents a weapon, extending the SalableProduct class and implementing the Comparable interface
  * for sorting. Weapons have an additional attribute for damage, indicating their offensive capability.
  */
-public class Weapon extends SalableProduct implements Comparable<Weapon> {
+public class Weapon extends SalableProduct {
     private int damage; // Additional attribute specific to weapons
 
     /**
@@ -46,8 +46,5 @@ public class Weapon extends SalableProduct implements Comparable<Weapon> {
      * @return A negative integer, zero, or a positive integer as this weapon's name
      *         is less than, equal to, or greater than the specified weapon's name, ignoring case.
      */
-    @Override
-    public int compareTo(Weapon w) {
-        return this.getName().compareToIgnoreCase(w.getName());
-    }
+    
 }

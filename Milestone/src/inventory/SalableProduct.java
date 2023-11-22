@@ -6,7 +6,7 @@ package inventory;
  * This class represents a product that is available for sale in the store
  */
 
-public class SalableProduct {
+public class SalableProduct implements Comparable<SalableProduct> {
 
 	
  	private String name;
@@ -22,6 +22,12 @@ public class SalableProduct {
      * @param quantity the amount of the product we have in the store
      */
 
+    /**
+     * No argument constructor
+     */
+    public SalableProduct() {
+    	
+    }
     public SalableProduct(String name, String description, double price, int quantity){
         this.name = name;
         this.description = description;
@@ -103,6 +109,11 @@ public class SalableProduct {
         return String.format("Name: %s - Description: %s - Price: $%.2f - Quantity: %d",
                 name, description, price, quantity);
     }
+
+	@Override
+	public int compareTo(SalableProduct other) {
+		return this.getName().compareToIgnoreCase(other.getName());
+	}
 
 
 }

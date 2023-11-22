@@ -1,5 +1,6 @@
 package app;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,27 +12,35 @@ import inventory.SalableProduct;
  */
 public class InventoryManager {
     private List<SalableProduct> products;
+    private final FileService fileService;
     
     /**
      * Inventory manager class is the manger of all products in the store.
      * We can add new items in our store in this class.
      * 
-     * UPDATED, added two items to the product list for customers to purchase
+     * UPDATED by using the FileService class and also giving exception handling
+     * to help if errors arise.
      */
-    public InventoryManager(){
-        this.products = new ArrayList<>();
-
-        products.add(new SalableProduct("King's Sword", "Long, Sharpe Blade originally welded for the King", 35.0, 35));
-        products.add(new SalableProduct("Majestic Bow and Arrow", "Curved wooden bow and a feather arrow " +
-                "with a sharp point", 40.0, 15));
-        products.add(new SalableProduct("Stun rifle", "Rifle that was brought from the future that launches " + 
-                "electric shocked bullet projectiles", 200.0, 5));
-        products.add(new SalableProduct("Armoured Shield", "Reinforced steel shield ", 25.0, 75));
-        products.add(new SalableProduct("Dragon Skin Body Amour", "Body suit armour made from the skin " + 
-        		"of a slayed dragon", 85.0, 100));
-        products.add(new SalableProduct("Magic Juice", "Delicious drink that replenishes you to" +
-                "full health", 20.0, 100));
-        products.add(new SalableProduct("Senzu Beans", "Mystical beans that replensish your energy", 12.0, 500));
+    public InventoryManager(FileService fileService) {
+        this.fileService = fileService;
+        try {
+            this.products = fileService.readInventoryFromFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.products = new ArrayList<>(); // Fallback to empty list
+        }
+    }
+    
+    /**
+     * Method to update the inventory
+     */
+    public void updateInventory() {
+        try {
+            fileService.writeInventoryToFile(products);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle exceptions, maybe log them or notify the user
+        }
     }
     
     /**
@@ -39,7 +48,8 @@ public class InventoryManager {
      *
      * @return A list containing all the products available in the inventory.
      */
-    public List<SalableProduct> getProducts(){
+    @SuppressWarnings("exports")
+	public List<SalableProduct> getProducts(){
         return products;
     }
 
@@ -49,7 +59,8 @@ public class InventoryManager {
      * @param name the name of the product to retrieve
      * @return the product if found, null otherwise
      */
-    public SalableProduct getProductByName(String name) {
+    @SuppressWarnings("exports")
+	public SalableProduct getProductByName(String name) {
         for (SalableProduct product : products) {
             if (product.getName().equalsIgnoreCase(name)) {
                 return product;

@@ -12,7 +12,7 @@ import inventory.SalableProduct;
      * This class is responsible for user interface and its purpose is for the user
      * to interact with the store to buy items, return items, and even just see the 
      * description of any product. They can then view their shopping cart and finalize 
-     * all of their puirchases.
+     * all of their purchases.
      * 
      * @author Brandon Ortega
      *
@@ -24,9 +24,13 @@ import inventory.SalableProduct;
         
         /**
          * Constructor initializes the StoreFront with a new InventoryManager and ShoppingCart.
+         * 
+         * UPDATED to use the File Service and also have the name of the JSON file that we
+         * will be using for our inventory manager.
          */
         public StoreFront() {
-            inventoryManager = new InventoryManager();
+            FileService fileService = new FileService("inventory.json");
+            inventoryManager = new InventoryManager(fileService);
             shoppingCart = new ShoppingCart();
         }
         

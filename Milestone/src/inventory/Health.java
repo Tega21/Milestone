@@ -4,7 +4,7 @@ package inventory;
  * Represents a health item, extending the SalableProduct class. This class includes an additional
  * attribute for the heal amount, representing the health recovery value of the item.
  */
-public class Health extends SalableProduct {
+public class Health extends SalableProduct{
     private int healAmount;
 
     /**
@@ -38,4 +38,6 @@ public class Health extends SalableProduct {
     public void setHealAmount(int healAmount) {
         this.healAmount = healAmount;
     }
+
+	
 }

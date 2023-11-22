@@ -37,4 +37,6 @@ public class Armor extends SalableProduct {
     public void setDefense(int defense) {
         this.defense = defense;
     }
+
+	
 }
