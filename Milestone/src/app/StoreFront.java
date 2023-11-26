@@ -97,6 +97,9 @@ import inventory.SalableProduct;
          * to purchase anything.
          * ALSO, changes the interface by adding a number input rather than having the
          * user type out the name of the item.
+         * 
+         * Updated to give the user the ability to filter through our products by name
+         * or by price ascending or descending.
          */
         private void displayProductsAndAddToCart(Scanner scanner) {
         	// Adding sorting options

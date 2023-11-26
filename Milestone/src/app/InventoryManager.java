@@ -102,18 +102,35 @@ public class InventoryManager {
         }
     }
     
+    /**
+     * Sorts the list of products by name in ascending order.
+     * It uses the natural ordering of the products, which is defined by the compareTo method
+     * implemented in the SalableProduct class.
+     */
     public void sortProductsByNameAscending() {
         Collections.sort(products);
     }
 
+    /**
+     * Sorts the list of products by name in descending order.
+     * This is achieved by using the reverseOrder comparator along with the natural ordering.
+     */
     public void sortProductsByNameDescending() {
         products.sort(Collections.reverseOrder());
     }
 
+    /**
+     * Sorts the list of products by price in ascending order.
+     * It uses a comparator that compares products based on their price attribute.
+     */
     public void sortProductsByPriceAscending() {
         products.sort(Comparator.comparing(SalableProduct::getPrice));
     }
 
+    /**
+     * Sorts the list of products by price in descending order.
+     * It uses a comparator that compares products based on their price attribute in reverse order.
+     */
     public void sortProductsByPriceDescending() {
         products.sort(Comparator.comparing(SalableProduct::getPrice).reversed());
     }
