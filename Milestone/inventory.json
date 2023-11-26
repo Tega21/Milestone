@@ -24,6 +24,12 @@
       "quantity":150
    },
    {
+      "name":"Steel bunker",
+      "description":"A steel hut that is impact resitant and will hide and protect you for 30 seconds",
+      "price":75.0,
+      "quantity":500
+   },
+   {
       "name":"Dragon Skin Body Amour",
       "description":"Body suit armour made from the skin of a slayed dragon",
       "price":85.0,
