@@ -99,6 +99,17 @@ import inventory.SalableProduct;
          * user type out the name of the item.
          */
         private void displayProductsAndAddToCart(Scanner scanner) {
+        	// Adding sorting options
+        	 System.out.println("Sort products by: 1) Name Ascending 2) Name Descending 3) Price Ascending 4) Price Descending");
+        	    int sortChoice = scanner.nextInt();
+        	    switch(sortChoice) {
+        	        case 1: inventoryManager.sortProductsByNameAscending(); break;
+        	        case 2: inventoryManager.sortProductsByNameDescending(); break;
+        	        case 3: inventoryManager.sortProductsByPriceAscending(); break;
+        	        case 4: inventoryManager.sortProductsByPriceDescending(); break;
+        	    }
+
+        	    
             List<SalableProduct> products = inventoryManager.getProducts();
             if (products.isEmpty()) {
                 System.out.println("There are no products available for purchase.");

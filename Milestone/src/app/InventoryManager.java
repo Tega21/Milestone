@@ -2,6 +2,8 @@ package app;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import inventory.SalableProduct;
@@ -98,5 +100,21 @@ public class InventoryManager {
         if (product != null) {
             product.setQuantity(product.getQuantity() + quantity);
         }
+    }
+    
+    public void sortProductsByNameAscending() {
+        Collections.sort(products);
+    }
+
+    public void sortProductsByNameDescending() {
+        products.sort(Collections.reverseOrder());
+    }
+
+    public void sortProductsByPriceAscending() {
+        products.sort(Comparator.comparing(SalableProduct::getPrice));
+    }
+
+    public void sortProductsByPriceDescending() {
+        products.sort(Comparator.comparing(SalableProduct::getPrice).reversed());
     }
 }
