@@ -6,20 +6,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import inventory.SalableProduct;
 
 /**
- * Class represents the inventory in our store. USing a list to manage 
+ * Class represents the inventory in our store. USing a list to manage
  * SalableProduct objects.
  */
 public class InventoryManager {
     private List<SalableProduct> products;
     private final FileService fileService;
-    
+
     /**
      * Inventory manager class is the manger of all products in the store.
      * We can add new items in our store in this class.
-     * 
+     *
      * UPDATED by using the FileService class and also giving exception handling
      * to help if errors arise.
      */
@@ -32,7 +35,7 @@ public class InventoryManager {
             this.products = new ArrayList<>(); // Fallback to empty list
         }
     }
-    
+
     /**
      * Method to update the inventory
      */
@@ -44,14 +47,14 @@ public class InventoryManager {
             // Handle exceptions, maybe log them or notify the user
         }
     }
-    
+
     /**
      * Returns the list of all products in the inventory.
      *
      * @return A list containing all the products available in the inventory.
      */
     @SuppressWarnings("exports")
-	public List<SalableProduct> getProducts(){
+    public List<SalableProduct> getProducts(){
         return products;
     }
 
@@ -62,7 +65,7 @@ public class InventoryManager {
      * @return the product if found, null otherwise
      */
     @SuppressWarnings("exports")
-	public SalableProduct getProductByName(String name) {
+    public SalableProduct getProductByName(String name) {
         for (SalableProduct product : products) {
             if (product.getName().equalsIgnoreCase(name)) {
                 return product;
@@ -101,7 +104,7 @@ public class InventoryManager {
             product.setQuantity(product.getQuantity() + quantity);
         }
     }
-    
+
     /**
      * Sorts the list of products by name in ascending order.
      * It uses the natural ordering of the products, which is defined by the compareTo method
@@ -133,5 +136,22 @@ public class InventoryManager {
      */
     public void sortProductsByPriceDescending() {
         products.sort(Comparator.comparing(SalableProduct::getPrice).reversed());
+    }
+
+    public String getInventoryAsJson() throws JsonProcessingException{
+        return new ObjectMapper().writeValueAsString(products);
+    }
+
+    public void updateInventoryFromJson(String json) throws IOException {
+        SalableProduct newProduct = new ObjectMapper().readValue(json, SalableProduct.class);
+        products.add(newProduct);
+        updateInventory();
+    }
+    
+    public void addProductFromJson(String json) throws IOException {
+        SalableProduct newProduct = new ObjectMapper().readValue(json, SalableProduct.class);
+        // Add newProduct to the products list
+        products.add(newProduct);
+        fileService.writeInventoryToFile(products); // Update JSON file
     }
 }
