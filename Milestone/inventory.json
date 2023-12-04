@@ -46,5 +46,11 @@
       "description":"Mystical beans that replensish your energy",
       "price":15.0,
       "quantity":5000
+   },
+   {
+      "name":"Water",
+      "description":"refreshing drink replenishes your thirst",
+      "price":5.0,
+      "quantity":1000
    }
 ]
