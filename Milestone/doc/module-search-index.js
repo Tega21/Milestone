@@ -1,1 +1,1 @@
-moduleSearchIndex = [{"l":"Milestone"}];updateSearchResults();
+moduleSearchIndex = [];updateSearchResults();

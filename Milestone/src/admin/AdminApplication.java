@@ -84,7 +84,8 @@ public class AdminApplication {
 
     	            adminApp.sendCommand("U");
     	            adminApp.sendCommand(jsonPayload); // Send JSON payload
-    	        } else if ("R".equalsIgnoreCase(command)) {
+    	            adminApp.sendCommand("END"); // Indicate end of transmission
+    	        }else if ("R".equalsIgnoreCase(command)) {
     	            adminApp.sendCommand(command);
     	        }
 

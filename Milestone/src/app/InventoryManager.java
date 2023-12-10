@@ -53,7 +53,7 @@ public class InventoryManager {
      *
      * @return A list containing all the products available in the inventory.
      */
-    @SuppressWarnings("exports")
+    
     public List<SalableProduct> getProducts(){
         return products;
     }
@@ -64,14 +64,14 @@ public class InventoryManager {
      * @param name the name of the product to retrieve
      * @return the product if found, null otherwise
      */
-    @SuppressWarnings("exports")
+    
     public SalableProduct getProductByName(String name) {
         for (SalableProduct product : products) {
             if (product.getName().equalsIgnoreCase(name)) {
                 return product;
             }
         }
-        return null; // if no product found with the given name
+        return null;
     }
 
     /**
@@ -82,14 +82,21 @@ public class InventoryManager {
      * @param name The name of the product to be removed.
      * @param quantity The quantity of the product to be removed.
      */
-    public void removeProduct(String name, int quantity) {
+    public void removeProduct(String name, int quantityToRemove) {
         SalableProduct product = getProductByName(name);
-        if (product != null && product.getQuantity() >= quantity) {
-            product.setQuantity(product.getQuantity() - quantity);
-        } else {
-            System.out.println("Not enough quantity in stock or product not found.");
+        if (product == null) {
+            System.out.println("Product not found: " + name);
+            return;
         }
+        if (product.getQuantity() < quantityToRemove) {
+            System.out.println("Not enough quantity in stock for: " + name);
+            return;
+        }
+        product.setQuantity(product.getQuantity() - quantityToRemove); 
+        System.out.println("Reduced quantity for " + name + " to " + product.getQuantity());
+        updateInventory(); 
     }
+
 
     /**
      * Adds a specified quantity of a product to the inventory. If the product exists, it increases the
@@ -101,8 +108,16 @@ public class InventoryManager {
     public void addProduct(String name, int quantity) {
         SalableProduct product = getProductByName(name);
         if (product != null) {
+            // Product exists, update its quantity
             product.setQuantity(product.getQuantity() + quantity);
+        } else {
+            // Product does not exist, create a new product and add it to the inventory
+            product = new SalableProduct(name, "Default Description", 0.0, quantity); // Adjust as needed
+            products.add(product);
         }
+
+        // Update the inventory file
+        updateInventory();
     }
 
     /**

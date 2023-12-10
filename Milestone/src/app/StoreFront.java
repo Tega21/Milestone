@@ -40,6 +40,16 @@ public class StoreFront {
         adminThread = new Thread(adminService);
         adminThread.start();
     }
+    
+    /*
+     * New constructor for testing
+     */
+    public StoreFront(InventoryManager inventoryManager, ShoppingCart shoppingCart) {
+        this.inventoryManager = inventoryManager;
+        this.shoppingCart = shoppingCart;
+		this.adminService = null;
+		this.adminThread = new Thread();
+    }
 
     /**
      * Displays the main menu options to the console.
@@ -160,6 +170,23 @@ public class StoreFront {
         System.out.println("Added " + quantity + " of " + selectedProduct.getName() + " to the cart.");
 
     }
+    
+    /**
+     * Logic for adding a product to the cart.
+     *
+     * @param productNumber The product number to add.
+     * @param quantity The quantity to add.
+     * @return true if added successfully, false otherwise.
+     */
+    public boolean addProductToCart(int productNumber, int quantity) {
+        List<SalableProduct> products = inventoryManager.getProducts();
+        if (productNumber < 1 || productNumber > products.size()) {
+            return false;
+        }
+        SalableProduct selectedProduct = products.get(productNumber - 1);
+        shoppingCart.addProduct(selectedProduct, quantity);
+        return true;
+    }
 
 
     /**
@@ -200,6 +227,23 @@ public class StoreFront {
         shoppingCart.removeProduct(productToRemove);
         System.out.println("Removed " + productToRemove.getName() + " from the cart.");
     }
+    
+    /**
+     * Logic for removing a product from the cart.
+     *
+     * @param itemNumber The item number to remove.
+     * @return true if removed successfully, false otherwise.
+     */
+    public boolean removeProductFromCart(int itemNumber) {
+        Map<SalableProduct, Integer> cartItems = shoppingCart.getItems();
+        if (cartItems.isEmpty() || itemNumber < 1 || itemNumber > cartItems.size()) {
+            return false;
+        }
+        SalableProduct[] products = cartItems.keySet().toArray(new SalableProduct[0]);
+        SalableProduct productToRemove = products[itemNumber - 1];
+        shoppingCart.removeProduct(productToRemove);
+        return true;
+    }
 
     /**
      * Processes the user to see their cart and all the items that
@@ -227,12 +271,21 @@ public class StoreFront {
     /**
      * Processes the user's shopping cart and completes the purchase.
      * This might include calculating the total price and confirming the purchase.
+     * UPDATED now inventory will update to the correct amount after 
      */
-    private void checkout() {
+    public void checkout() {
         double total = shoppingCart.getTotal();
         if (total > 0) {
             System.out.println("\nChecking out. Total price: " + total);
-            shoppingCart.clear();
+
+            // Reduce the quantity in inventory
+            for (Map.Entry<SalableProduct, Integer> entry : shoppingCart.getItems().entrySet()) {
+                SalableProduct product = entry.getKey();
+                int quantity = entry.getValue();
+                inventoryManager.removeProduct(product.getName(), quantity);
+            }
+
+            shoppingCart.clear(); // Clear the cart after checkout
             System.out.println("Thank you for your purchase!");
         } else {
             System.out.println("\nYour cart is empty. Add some products before checkout.");

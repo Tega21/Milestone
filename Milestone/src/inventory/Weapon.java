@@ -36,15 +36,7 @@ public class Weapon extends SalableProduct {
      * @param damage The damage value to set.
      */
     public void setDamage(int damage) {
-        this.damage = damage;
-    }
+        this.damage = damage;    }
 
-    /**
-     * Compares this weapon with another weapon by name for ordering.
-     *
-     * @param w The weapon to be compared.
-     * @return A negative integer, zero, or a positive integer as this weapon's name
-     *         is less than, equal to, or greater than the specified weapon's name, ignoring case.
-     */
     
 }

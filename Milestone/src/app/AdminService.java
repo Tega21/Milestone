@@ -37,14 +37,33 @@ public class AdminService implements Runnable {
                  PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                  BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
 
-                String inputLine = in.readLine();
-                if ("U".equalsIgnoreCase(inputLine)) {
-                    String productJson = in.readLine(); // Read product JSON
-                    inventoryManager.updateInventoryFromJson(productJson); // Update inventory
-                    out.println("Product added successfully");
-                } else if ("R".equalsIgnoreCase(inputLine)) {
-                    String inventoryJson = inventoryManager.getInventoryAsJson();
-                    out.println(inventoryJson);
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) { // Listen for commands
+                    if ("U".equalsIgnoreCase(inputLine)) {
+                        StringBuilder jsonBuilder = new StringBuilder();
+                        String line;
+                        while (!(line = in.readLine()).equals("END")) {
+                            jsonBuilder.append(line);
+                        }
+                        String productJson = jsonBuilder.toString();
+
+                        // Process the received JSON to update inventory
+                        try {
+                            inventoryManager.updateInventoryFromJson(productJson); 
+                            out.println("Product added successfully");
+                        } catch (Exception e) {
+                            out.println("Error in updating product: " + e.getMessage());
+                        }
+
+                    } else if ("R".equalsIgnoreCase(inputLine)) {
+                        // Handle the "R" command
+                        try {
+                            String inventoryJson = inventoryManager.getInventoryAsJson();
+                            out.println(inventoryJson);
+                        } catch (Exception e) {
+                            out.println("Error in retrieving inventory: " + e.getMessage());
+                        }
+                    }
                 }
             } catch (IOException e) {
                 if (!running) break;
@@ -52,6 +71,8 @@ public class AdminService implements Runnable {
             }
         }
     }
+
+
 
 
     /**
